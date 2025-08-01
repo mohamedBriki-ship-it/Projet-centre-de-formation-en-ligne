@@ -30,17 +30,18 @@ public class User {
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;   // <-- حقل الدور
 
     @Column(name = "date_inscription")
     private LocalDate dateInscription;
 
-    // تعريف enum داخل الكلاس
     public enum Role {
         ADMIN,
-        USER,
+        ETUDIANT,
         PROFESSEUR
     }
+
 
     public User() {}
 
