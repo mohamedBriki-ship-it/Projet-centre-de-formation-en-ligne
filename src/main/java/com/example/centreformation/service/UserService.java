@@ -1,12 +1,14 @@
 package com.example.centreformation.service;
 
+import com.example.centreformation.dto.UserDTO;
 import com.example.centreformation.entity.User;
+import com.example.centreformation.mapper.UserMapper;
 import com.example.centreformation.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -14,37 +16,45 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @Autowired
+    private UserMapper mapper;
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public User getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+    public UserDTO getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(mapper::toDTO)
+                .orElse(null);
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public UserDTO saveUser(UserDTO dto) {
+        User user = mapper.toEntity(dto);
+        User saved = userRepository.save(user);
+        return mapper.toDTO(saved);
     }
 
-    public User updateUser(Long id, User userDetails) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setNom(userDetails.getNom());
-            user.setPrenom(userDetails.getPrenom());
-            user.setEmail(userDetails.getEmail());
-            user.setMotDePasse(userDetails.getMotDePasse());
-            user.setRole(userDetails.getRole());
-            user.setDateInscription(userDetails.getDateInscription());
-            return userRepository.save(user);
-        }
-        return null;
+    public UserDTO updateUser(Long id, UserDTO dto) {
+        return userRepository.findById(id).map(existing -> {
+            existing.setNom(dto.getNom());
+            existing.setPrenom(dto.getPrenom());
+            existing.setEmail(dto.getEmail());
+            existing.setMotDePasse(dto.getMotDePasse());
+            if (dto.getRole() != null) {
+                existing.setRole(User.Role.valueOf(dto.getRole()));
+            }
+            existing.setDateInscription(dto.getDateInscription());
+            User updated = userRepository.save(existing);
+            return mapper.toDTO(updated);
+        }).orElse(null);
     }
 
     public boolean deleteUser(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()) {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return true;
         }

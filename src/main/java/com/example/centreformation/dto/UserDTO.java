@@ -1,42 +1,21 @@
-package com.example.centreformation.entity;
+package com.example.centreformation.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class UserDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nom;
-
     private String prenom;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(name = "mot_de_passe", nullable = false)
     private String motDePasse;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
-
-    @Column(name = "date_inscription")
+    private String role;
     private LocalDate dateInscription;
 
-    public enum Role {
-        ADMIN,
-        ETUDIANT,
-        PROFESSEUR
-    }
+    public UserDTO() {}
 
-    public User() {}
-
-    public User(String nom, String prenom, String email, String motDePasse, Role role, LocalDate dateInscription) {
+    public UserDTO(Long id, String nom, String prenom, String email, String motDePasse, String role, LocalDate dateInscription) {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -62,8 +41,8 @@ public class User {
     public String getMotDePasse() { return motDePasse; }
     public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     public LocalDate getDateInscription() { return dateInscription; }
     public void setDateInscription(LocalDate dateInscription) { this.dateInscription = dateInscription; }

@@ -1,6 +1,6 @@
 package com.example.centreformation.controller;
 
-import com.example.centreformation.entity.Paiement;
+import com.example.centreformation.dto.PaiementDTO;
 import com.example.centreformation.service.PaiementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,55 +10,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/paiements")
+@CrossOrigin(origins = "*")
 public class PaiementController {
 
     @Autowired
     private PaiementService paiementService;
 
-    // 🔹 Ajouter un paiement
     @PostMapping
-    public ResponseEntity<Paiement> createPaiement(@RequestBody Paiement paiement) {
-        Paiement newPaiement = paiementService.createPaiement(paiement);
-        return ResponseEntity.ok(newPaiement);
+    public ResponseEntity<PaiementDTO> createPaiement(@RequestBody PaiementDTO dto) {
+        PaiementDTO created = paiementService.createPaiement(dto);
+        return ResponseEntity.ok(created);
     }
 
-    // 🔹 Obtenir tous les paiements
     @GetMapping
-    public ResponseEntity<List<Paiement>> getAllPaiements() {
-        List<Paiement> paiements = paiementService.getAllPaiements();
-        return ResponseEntity.ok(paiements);
+    public ResponseEntity<List<PaiementDTO>> getAllPaiements() {
+        List<PaiementDTO> list = paiementService.getAllPaiements();
+        return ResponseEntity.ok(list);
     }
 
-    // 🔹 Obtenir un paiement par ID
     @GetMapping("/{id}")
-    public ResponseEntity<Paiement> getPaiementById(@PathVariable Long id) {
-        Paiement paiement = paiementService.getPaiementById(id);
-        if (paiement != null) {
-            return ResponseEntity.ok(paiement);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<PaiementDTO> getPaiementById(@PathVariable Long id) {
+        PaiementDTO dto = paiementService.getPaiementById(id);
+        if (dto == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(dto);
     }
 
-    // 🔹 Mettre à jour un paiement
     @PutMapping("/{id}")
-    public ResponseEntity<Paiement> updatePaiement(@PathVariable Long id, @RequestBody Paiement paiementDetails) {
-        Paiement updated = paiementService.updatePaiement(id, paiementDetails);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<PaiementDTO> updatePaiement(@PathVariable Long id, @RequestBody PaiementDTO dto) {
+        PaiementDTO updated = paiementService.updatePaiement(id, dto);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
     }
 
-    // 🔹 Supprimer un paiement
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePaiement(@PathVariable Long id) {
         boolean deleted = paiementService.deletePaiement(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        if (deleted) return ResponseEntity.noContent().build();
+        else return ResponseEntity.notFound().build();
     }
 }

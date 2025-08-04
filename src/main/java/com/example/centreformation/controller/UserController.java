@@ -1,6 +1,6 @@
 package com.example.centreformation.controller;
 
-import com.example.centreformation.entity.User;
+import com.example.centreformation.dto.UserDTO;
 import com.example.centreformation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,43 +15,39 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET all users
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    // GET user by id
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        if(user == null) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        UserDTO dto = userService.getUserById(id);
+        if (dto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(dto);
     }
 
-    // POST create new user
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO dto) {
+        UserDTO created = userService.saveUser(dto);
+        return ResponseEntity.ok(created);
     }
 
-    // PUT update user
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
-        if(updatedUser == null) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
+        UserDTO updated = userService.updateUser(id, dto);
+        if (updated == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(updated);
     }
 
-    // DELETE user
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean deleted = userService.deleteUser(id);
-        if(!deleted) {
+        if (!deleted) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();

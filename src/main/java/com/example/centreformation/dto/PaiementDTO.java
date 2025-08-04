@@ -1,36 +1,21 @@
-package com.example.centreformation.entity;
+package com.example.centreformation.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "paiements")
-public class Paiement {
+public class PaiementDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "inscription_id", nullable = false)
-    private Inscription inscription;
-
-    @Column(nullable = false)
+    private Long inscriptionId;  // فقط نبعث الـ id متاع inscription
     private Double montant;
-
-    @Column(name = "date_paiement", nullable = false)
     private LocalDate datePaiement;
-
-    @Column(name = "methode_paiement", nullable = false)
     private String methodePaiement;
-
-    @Column(nullable = false)
     private String statut;
 
-    public Paiement() {}
+    public PaiementDTO() {}
 
-    public Paiement(Inscription inscription, Double montant, LocalDate datePaiement, String methodePaiement, String statut) {
-        this.inscription = inscription;
+    public PaiementDTO(Long id, Long inscriptionId, Double montant, LocalDate datePaiement, String methodePaiement, String statut) {
+        this.id = id;
+        this.inscriptionId = inscriptionId;
         this.montant = montant;
         this.datePaiement = datePaiement;
         this.methodePaiement = methodePaiement;
@@ -42,8 +27,8 @@ public class Paiement {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Inscription getInscription() { return inscription; }
-    public void setInscription(Inscription inscription) { this.inscription = inscription; }
+    public Long getInscriptionId() { return inscriptionId; }
+    public void setInscriptionId(Long inscriptionId) { this.inscriptionId = inscriptionId; }
 
     public Double getMontant() { return montant; }
     public void setMontant(Double montant) { this.montant = montant; }

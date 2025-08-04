@@ -1,31 +1,19 @@
-package com.example.centreformation.entity;
+package com.example.centreformation.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "formations")
-public class Formation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FormationDTO {
     private Long id;
-
     private String titre;
     private String description;
-
-    @Column(name = "duree_heures")
     private int dureeHeures;
-
-    @Column(name = "logiciel_cible")
     private String logicielCible;
-
-    @Column(name = "date_creation")
     private LocalDate dateCreation;
 
-    public Formation() {}
+    public FormationDTO() {}
 
-    public Formation(String titre, String description, int dureeHeures, String logicielCible, LocalDate dateCreation) {
+    public FormationDTO(Long id, String titre, String description, int dureeHeures, String logicielCible, LocalDate dateCreation) {
+        this.id = id;
         this.titre = titre;
         this.description = description;
         this.dureeHeures = dureeHeures;

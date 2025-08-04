@@ -1,12 +1,15 @@
 package com.example.centreformation.service;
 
+import com.example.centreformation.dto.FormationDTO;
 import com.example.centreformation.entity.Formation;
+import com.example.centreformation.mapper.FormationMapper;
 import com.example.centreformation.repository.FormationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FormationService {
@@ -18,34 +21,34 @@ public class FormationService {
         this.formationRepository = formationRepository;
     }
 
-    // Ajouter une formation
-    public Formation createFormation(Formation formation) {
-        return formationRepository.save(formation);
+    public FormationDTO createFormation(FormationDTO formationDTO) {
+        Formation formation = FormationMapper.toEntity(formationDTO);
+        return FormationMapper.toDTO(formationRepository.save(formation));
     }
 
-    // Récupérer toutes les formations
-    public List<Formation> getAllFormations() {
-        return formationRepository.findAll();
+    public List<FormationDTO> getAllFormations() {
+        return formationRepository.findAll()
+                .stream()
+                .map(FormationMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    // Récupérer une formation par ID
-    public Optional<Formation> getFormationById(Long id) {
-        return formationRepository.findById(id);
+    public Optional<FormationDTO> getFormationById(Long id) {
+        return formationRepository.findById(id)
+                .map(FormationMapper::toDTO);
     }
 
-    // Mettre à jour une formation
-    public Formation updateFormation(Long id, Formation updatedFormation) {
-        return formationRepository.findById(id).map(formation -> {
-            formation.setTitre(updatedFormation.getTitre());
-            formation.setDescription(updatedFormation.getDescription());
-            formation.setDureeHeures(updatedFormation.getDureeHeures());
-            formation.setLogicielCible(updatedFormation.getLogicielCible());
-            formation.setDateCreation(updatedFormation.getDateCreation());
-            return formationRepository.save(formation);
+    public FormationDTO updateFormation(Long id, FormationDTO formationDTO) {
+        return formationRepository.findById(id).map(existing -> {
+            existing.setTitre(formationDTO.getTitre());
+            existing.setDescription(formationDTO.getDescription());
+            existing.setDureeHeures(formationDTO.getDureeHeures());
+            existing.setLogicielCible(formationDTO.getLogicielCible());
+            existing.setDateCreation(formationDTO.getDateCreation());
+            return FormationMapper.toDTO(formationRepository.save(existing));
         }).orElse(null);
     }
 
-    // Supprimer une formation
     public boolean deleteFormation(Long id) {
         if (formationRepository.existsById(id)) {
             formationRepository.deleteById(id);

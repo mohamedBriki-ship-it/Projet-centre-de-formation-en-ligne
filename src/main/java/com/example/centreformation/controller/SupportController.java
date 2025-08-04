@@ -1,6 +1,6 @@
 package com.example.centreformation.controller;
 
-import com.example.centreformation.entity.Support;
+import com.example.centreformation.dto.SupportDTO;
 import com.example.centreformation.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,55 +10,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/supports")
+@CrossOrigin(origins = "*")
 public class SupportController {
 
     @Autowired
     private SupportService supportService;
 
-    // إضافة support جديد
     @PostMapping
-    public ResponseEntity<Support> createSupport(@RequestBody Support support) {
-        Support createdSupport = supportService.createSupport(support);
-        return ResponseEntity.ok(createdSupport);
+    public ResponseEntity<SupportDTO> createSupport(@RequestBody SupportDTO dto) {
+        SupportDTO created = supportService.createSupport(dto);
+        return ResponseEntity.ok(created);
     }
 
-    // جلب كل ال supports
     @GetMapping
-    public ResponseEntity<List<Support>> getAllSupports() {
-        List<Support> supports = supportService.getAllSupports();
-        return ResponseEntity.ok(supports);
+    public ResponseEntity<List<SupportDTO>> getAllSupports() {
+        List<SupportDTO> list = supportService.getAllSupports();
+        return ResponseEntity.ok(list);
     }
 
-    // جلب support حسب ID
     @GetMapping("/{id}")
-    public ResponseEntity<Support> getSupportById(@PathVariable Long id) {
-        Support support = supportService.getSupportById(id);
-        if (support != null) {
-            return ResponseEntity.ok(support);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SupportDTO> getSupportById(@PathVariable Long id) {
+        SupportDTO dto = supportService.getSupportById(id);
+        if (dto == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(dto);
     }
 
-    // تحديث support
     @PutMapping("/{id}")
-    public ResponseEntity<Support> updateSupport(@PathVariable Long id, @RequestBody Support supportDetails) {
-        Support updatedSupport = supportService.updateSupport(id, supportDetails);
-        if (updatedSupport != null) {
-            return ResponseEntity.ok(updatedSupport);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SupportDTO> updateSupport(@PathVariable Long id, @RequestBody SupportDTO dto) {
+        SupportDTO updated = supportService.updateSupport(id, dto);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
     }
 
-    // حذف support
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupport(@PathVariable Long id) {
         boolean deleted = supportService.deleteSupport(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        if (deleted) return ResponseEntity.noContent().build();
+        else return ResponseEntity.notFound().build();
     }
 }

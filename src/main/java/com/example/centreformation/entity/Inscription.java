@@ -11,12 +11,10 @@ public class Inscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Association avec User
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Association avec Formation
     @ManyToOne
     @JoinColumn(name = "formation_id", nullable = false)
     private Formation formation;
@@ -25,9 +23,9 @@ public class Inscription {
     private LocalDate dateInscription;
 
     @Column(name = "statut_paiement")
-    private String statutPaiement; // Exemple: "payé", "en attente", "non payé"
+    private String statutPaiement;
 
-    // ===== Constructors =====
+    // Constructors
     public Inscription() {}
 
     public Inscription(User user, Formation formation, LocalDate dateInscription, String statutPaiement) {
@@ -37,45 +35,19 @@ public class Inscription {
         this.statutPaiement = statutPaiement;
     }
 
-    // ===== Getters and Setters =====
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Formation getFormation() { return formation; }
+    public void setFormation(Formation formation) { this.formation = formation; }
 
-    public User getUser() {
-        return user;
-    }
+    public LocalDate getDateInscription() { return dateInscription; }
+    public void setDateInscription(LocalDate dateInscription) { this.dateInscription = dateInscription; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Formation getFormation() {
-        return formation;
-    }
-
-    public void setFormation(Formation formation) {
-        this.formation = formation;
-    }
-
-    public LocalDate getDateInscription() {
-        return dateInscription;
-    }
-
-    public void setDateInscription(LocalDate dateInscription) {
-        this.dateInscription = dateInscription;
-    }
-
-    public String getStatutPaiement() {
-        return statutPaiement;
-    }
-
-    public void setStatutPaiement(String statutPaiement) {
-        this.statutPaiement = statutPaiement;
-    }
+    public String getStatutPaiement() { return statutPaiement; }
+    public void setStatutPaiement(String statutPaiement) { this.statutPaiement = statutPaiement; }
 }

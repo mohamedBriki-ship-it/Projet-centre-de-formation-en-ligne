@@ -1,6 +1,6 @@
 package com.example.centreformation.controller;
 
-import com.example.centreformation.entity.Inscription;
+import com.example.centreformation.dto.InscriptionDTO;
 import com.example.centreformation.service.InscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +17,28 @@ public class InscriptionController {
     private InscriptionService inscriptionService;
 
     @GetMapping
-    public List<Inscription> getAllInscriptions() {
+    public List<InscriptionDTO> getAllInscriptions() {
         return inscriptionService.getAllInscriptions();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Inscription> getInscriptionById(@PathVariable Long id) {
-        Inscription inscription = inscriptionService.getInscriptionById(id);
-        return (inscription != null) ? ResponseEntity.ok(inscription) : ResponseEntity.notFound().build();
+    public ResponseEntity<InscriptionDTO> getInscriptionById(@PathVariable Long id) {
+        InscriptionDTO dto = inscriptionService.getInscriptionById(id);
+        return (dto != null) ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Inscription> createInscription(@RequestBody Inscription inscription) {
-        Inscription created = inscriptionService.createInscription(inscription);
+    public ResponseEntity<InscriptionDTO> createInscription(@RequestBody InscriptionDTO dto) {
+        InscriptionDTO created = inscriptionService.createInscription(dto);
+        if (created == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Inscription> updateInscription(@PathVariable Long id, @RequestBody Inscription inscription) {
-        Inscription updated = inscriptionService.updateInscription(id, inscription);
+    public ResponseEntity<InscriptionDTO> updateInscription(@PathVariable Long id, @RequestBody InscriptionDTO dto) {
+        InscriptionDTO updated = inscriptionService.updateInscription(id, dto);
         return (updated != null) ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 

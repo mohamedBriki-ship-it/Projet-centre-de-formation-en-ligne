@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "supports") // اختياري، تحدد اسم الجدول
+@Table(name = "supports")
 public class Support {
 
     @Id
@@ -37,7 +37,8 @@ public class Support {
         this.dateAjout = dateAjout;
     }
 
-    // getters & setters
+    // getters and setters
+
     public Long getId() {
         return id;
     }
